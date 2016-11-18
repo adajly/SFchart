@@ -60,7 +60,7 @@ data = [
 	{name : 'Other',value : 0.73,color:'#6f83a5'}
 ]
 ```
-[点击此处查看示例](aaa)
+[点击此处查看示例](https://zyl1314.github.io/SFchart/column2D.html)
 
 2、2DArea
 ```
@@ -101,4 +101,4 @@ var data = [
 ];
 var labels = ["01月","02月","03月","04月","05月","06月","07月","08月","09月","10月","11月","12月"];
 ```
-[点击此处查看示例](aaa)
+[点击此处查看示例](https://zyl1314.github.io/SFchart/area2D.html)
