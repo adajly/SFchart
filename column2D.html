@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>demo1</title>
+<script src="SFchart.js"></script>
+</head>
+
+<body>
+<canvas id="myChart" width="800" height="400"></canvas>
+<script>
+var canvas = document.getElementById('myChart');
+var ctx = canvas.getContext("2d");
+var data = [
+	{name : 'IE',value : 35.75,color:'#a5c2d5'},
+	{name : 'Chrome',value : 29.84,color:'#cbab4f'},
+	{name : 'Safari',value : 6.77,color:'#9f7961'},
+	{name : 'Opera',value : 2.02,color:'#a56f8f'},
+	{name : 'Firefox',value : 24.88,color:'#76a871'},
+	{name : 'Other',value : 0.73,color:'#6f83a5'}
+];
+new SFchart.Column2D({
+	width : 450,
+	height : 300,
+	xSize : 12,
+	ySize : 12,
+	titleSize : 12,
+	data : data,
+	columnWidth : 30,
+	maxY : 40,
+	yNum : 5,
+	ySign : "%",
+	animation : true,
+	title : 'demo1'
+}).draw(ctx);
+</script>
+</body>
+</html>

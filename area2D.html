@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>demo2</title>
+<script src="SFchart.js"></script>
+</head>
+
+<body>
+<canvas id="myChart" width="800" height="400"></canvas>
+<script>
+var canvas = document.getElementById('myChart');
+var ctx = canvas.getContext("2d");
+var data = [
+	{
+		name : '上海',
+		value:[4,16,18,24,32,36,38,38,36,26,20,14],
+		color:'#aad0db',
+		line_width:2
+	},
+	{
+		name : '北京',
+		value:[-9,1,12,20,26,30,32,29,22,12,0,-6],
+		color:'#f68f70',
+		line_width:2
+	}
+];
+var labels = ["01月","02月","03月","04月","05月","06月","07月","08月","09月","10月","11月","12月"];
+new SFchart.Area2D({
+	xSize : 12,
+	ySize : 12,
+	titleSize : 12,
+	canvasWidth : 800,
+	canvasHeight : 400,
+	width : 700,
+	height : 350,
+	data : data,
+	labels : labels,
+	yMax  : 40,
+	yMin : -10,
+	yInterval : 5,
+	ySign : '℃',
+	animation : true,
+	title : '上海-北京温度对比'
+}).draw(ctx);
+</script>
+</body>
+</html>
