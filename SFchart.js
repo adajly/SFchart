@@ -343,7 +343,7 @@ SFchart.Area2D.prototype.drawValueLine = function(){
 	var _this = this;
 	ctx.beginPath();
 	ctx.rect(this.setting.ySize*3,this.setting.titleSize*1.5,this.setting.width,this.setting.height);
-	document.getElementById('myChart').onmousemove = function(ev){
+	document.getElementById(this.setting.id).onmousemove = function(ev){
         e = ev || event;
         var x = e.clientX - this.offsetLeft;
         var y = e.clientY - this.offsetTop;
@@ -394,6 +394,188 @@ SFchart.Area2D.prototype.drawTitle = function(){
 	ctx.fillText(this.setting.title, (this.setting.width-textLen)*0.5, this.setting.titleSize);
 	ctx.restore();
 }
+
+
+
+//2D饼状图
+
+SFchart.Pie2D = function(opt){
+	//默认参数	
+	this.setting = {
+		
+	}
+	//参数重写
+	extend(this.setting,opt);
+}	
+SFchart.Pie2D.prototype.draw = function(ctx){
+	if(this.setting.animation){
+		this.drawCircleAnimation();
+	}else{
+		this.drawCircle();	
+		this.drawValue();
+		this.hover();
+	}
+	
+}
+SFchart.Pie2D.prototype.drawCircle = function(){
+	var angle_pre= 0;
+	var angle_next= 0;
+	var x = this.setting.xCircle;
+	var y = this.setting.yCircle;
+	var r = this.setting.rCircle;
+	
+	for(var i=0; i<this.setting.data.length; i++){
+		angle_next+=this.setting.data[i].value;
+		ctx.beginPath();
+		ctx.fillStyle = this.setting.data[i].color;
+		ctx.strokeStyle = "white";
+		ctx.moveTo(x,y);
+		ctx.arc(x,y,r,angle_pre/100*Math.PI*2,angle_next/100*Math.PI*2);
+		ctx.lineTo(x,y);
+		ctx.fill();	
+		ctx.stroke();	
+		ctx.closePath();
+		angle_pre = angle_next;
+	}
+	
+}
+
+SFchart.Pie2D.prototype.drawCircleAnimation = function(){
+	var x = this.setting.xCircle;
+	var y = this.setting.yCircle;
+	var r = this.setting.rCircle;
+	var num = 0;
+	var _this = this;
+	
+	var timer = setInterval(function(){
+		var now = 0;
+		for(var i=0; i<_this.setting.data.length; i++){
+			now+=_this.setting.data[i].value;
+			if(num<now){
+				ctx.beginPath();
+				ctx.fillStyle = _this.setting.data[i].color;
+				ctx.moveTo(x,y);
+				ctx.arc(x,y,r,num/100*Math.PI*2,(num+1)/100*Math.PI*2);
+				ctx.lineTo(x,y);
+				ctx.fill();	
+				ctx.closePath();
+				break;	
+			}	
+		}
+		num+=0.5;
+		if(num>=100){
+			clearInterval(timer);	
+			_this.drawCircle();
+			_this.drawValue();
+			_this.hover();
+		}
+	},20)
+}
+SFchart.Pie2D.prototype.drawValue = function(){
+
+	for(var i=0; i<this.setting.data.length; i++){
+		var now = 0;
+		if(i===0){
+			now = this.setting.data[i].value/2;
+		}else{
+			for(var j=0; j<=(i-1); j++){
+				now += this.setting.data[j].value;	
+			}
+			now += this.setting.data[i].value/2;			
+		}
+		
+		var str = this.setting.data[i].name + ' : ' + this.setting.data[i].value + '%';
+		var strLen = ctx.measureText(str).width;
+
+		var x = Math.cos(-now/100*Math.PI*2)*this.setting.rCircle;
+		var y = Math.sin(-now/100*Math.PI*2)*this.setting.rCircle;
+		
+		ctx.font = "italic 12px sans-serif";
+		ctx.fillStyle = "green";
+		if(now>25&&now<75){
+			ctx.fillText(str, this.setting.xCircle+x-strLen, this.setting.yCircle-y);		
+		}else{
+			ctx.fillText(str, this.setting.xCircle+x, this.setting.yCircle-y);
+		}
+	}	
+}
+
+SFchart.Pie2D.prototype.hover = function(){
+
+	var oC = document.getElementById(this.setting.id);
+	var x = this.setting.xCircle;
+	var y = this.setting.yCircle;
+	var r = this.setting.rCircle;
+	var _this = this;
+	var i_prev = 0;
+
+	
+	document.onmousemove = function(ev){
+		var angle_pre= 0;
+		var angle_next= 0;
+		var e = ev || event;
+		var xM = e.clientX - oC.offsetLeft;
+		var yM = e.clientY - oC.offsetTop;
+		
+		for(var i=0; i<_this.setting.data.length; i++){
+			angle_next+=_this.setting.data[i].value;
+			ctx.beginPath();
+			ctx.moveTo(x,y);
+			ctx.arc(x,y,r,angle_pre/100*Math.PI*2,angle_next/100*Math.PI*2);
+			ctx.lineTo(x,y);
+			if(ctx.isPointInPath(xM,yM)){
+				console.log(i);
+				if(i!=i_prev){
+					console.log(i);
+					_this.drawHover(i);
+				}
+				i_prev = i;
+				return;	
+			}
+			angle_pre = angle_next;
+		}	
+		ctx.clearRect(x-2*r,y-2*r,4*r,4*r);
+		_this.drawCircle();
+		_this.drawValue();
+	}
+}
+
+SFchart.Pie2D.prototype.drawHover = function(target){
+	var x = this.setting.xCircle;
+	var y = this.setting.yCircle;
+	var r = this.setting.rCircle;
+	ctx.clearRect(x-2*r,y-2*r,4*r,4*r);
+	
+	var angle_pre= 0;
+	var angle_next= 0;
+	var x = this.setting.xCircle;
+	var y = this.setting.yCircle;
+	var r = this.setting.rCircle;
+	
+	for(var i=0; i<this.setting.data.length; i++){
+		angle_next+=this.setting.data[i].value;
+		ctx.save();
+		ctx.beginPath();
+		if(i==target){
+			ctx.globalAlpha = 0.6;	
+		}else{
+			ctx.globalAlpha = 1;	
+		}
+		ctx.fillStyle = this.setting.data[i].color;
+		ctx.strokeStyle = "white";
+		ctx.moveTo(x,y);
+		ctx.arc(x,y,r,angle_pre/100*Math.PI*2,angle_next/100*Math.PI*2);
+		ctx.lineTo(x,y);
+		ctx.fill();	
+		ctx.stroke();	
+		ctx.closePath();
+		ctx.restore();
+		angle_pre = angle_next;
+	}
+	this.drawValue();
+}
+
+
 
 //对外接口
 window.SFchart = SFchart;
