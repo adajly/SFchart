@@ -102,3 +102,28 @@ var data = [
 var labels = ["01月","02月","03月","04月","05月","06月","07月","08月","09月","10月","11月","12月"];
 ```
 [点击此处查看示例](https://zyl1314.github.io/SFchart/area2D.html)
+
+3、2DPie
+```
+//配置项说明
+{
+	id : "myChart",
+	xCircle : 400,  
+	yCircle : 200,
+	rCircle : 100,
+	data : data,
+	animation : true
+}
+```
+```
+//数据格式示例
+var data =[
+		{name : 'Other',value : 4,color:'#6f83a5'},
+		{name : 'IE',value : 32,color:'#a5c2d5'},
+		{name : 'Chrome',value : 30,color:'#cbab4f'},
+		{name : 'Firefox',value : 22,color:'#76a871'},
+		{name : 'Safari',value : 6,color:'#9f7961'},
+		{name : 'Opera',value : 6,color:'#a56f8f'}
+	]
+```
+[点击此处查看示例](https://zyl1314.github.io/SFchart/pie2D.html)
