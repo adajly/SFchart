@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>demo2</title>
+<script src="SFchart.js"></script>
+</head>
+
+<body>
+<canvas id="myChart" width="800" height="400"></canvas>
+<script>
+var canvas = document.getElementById('myChart');
+var ctx = canvas.getContext("2d");
+var data = [
+			{name : 'Other',value : 4,color:'#6f83a5'},
+			{name : 'IE',value : 32,color:'#a5c2d5'},
+			{name : 'Chrome',value : 30,color:'#cbab4f'},
+			{name : 'Firefox',value : 22,color:'#76a871'},
+			{name : 'Safari',value : 6,color:'#9f7961'},
+			{name : 'Opera',value : 6,color:'#a56f8f'}
+		];
+new SFchart.Pie2D({
+	id : "myChart",
+	xCircle : 400,
+	yCircle : 200,
+	rCircle : 100,
+	data : data,
+	animation : true
+}).draw(ctx);
+</script>
+</body>
+</html>
